@@ -1,9 +1,16 @@
 package main
 
 import (
+  "time"
+  "fmt"
   "github.com/rotta-f/Requireris"
 )
 
 func main() {
-  Requireris.SayHello()
+  hotp := Requireris.GetHOTP("base32secret3232")
+  now := time.Now()
+  secs := now.Unix()
+  fmt.Println("secs: ", secs, " | secs/30: ", secs / 30)
+  //hotp.At(int(secs / 30))
+  hotp.At(5)
 }
