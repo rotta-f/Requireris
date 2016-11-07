@@ -11,6 +11,5 @@ func main() {
   now := time.Now()
   secs := now.Unix()
   fmt.Println("secs: ", secs, " | secs/30: ", secs / 30)
-  //hotp.At(int(secs / 30))
-  hotp.At(5)
+  hotp.At(uint64(secs / 30))
 }
