@@ -23,10 +23,15 @@ type OTP struct {
 
 func Init(secret string) *OTP {
   if strings.Contains(secret, " ") {
-    // google encoded secret in the form of "xxxx xxxx xxxx xxxx"
+    // google encodes secrets in the form of "xxxx xxxx xxxx xxxx"
     // we need to remove whitespace and uppercase it "XXXXXXXXXXXXXXXX"
     secret = strings.ToUpper(strings.Replace(secret, " ", "", -1))
+  } else {
+    // create a base32 secret
+    secret = base32.StdEncoding.EncodeToString([]byte(secret))
   }
+  fmt.Print("base32 key ")
+  fmt.Println(secret)
   return &OTP{
     SecretKey : secret,
   }
