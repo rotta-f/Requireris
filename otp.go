@@ -27,8 +27,12 @@ func Init(secret string) *OTP {
     // we need to remove whitespace and uppercase it "XXXXXXXXXXXXXXXX"
     secret = strings.ToUpper(strings.Replace(secret, " ", "", -1))
   } else {
-    // create a base32 secret
-    secret = base32.StdEncoding.EncodeToString([]byte(secret))
+    // check if secret is already a base32 secret
+    _, err := base32.StdEncoding.DecodeString(secret)
+    if err != nil {
+      // create a base32 secret
+      secret = base32.StdEncoding.EncodeToString([]byte(secret))
+    }
   }
   fmt.Print("base32 key ")
   fmt.Println(secret)
