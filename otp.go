@@ -81,7 +81,7 @@ func (h *OTP) genOtp(c uint64) string {
   return paddedRet
 }
 
-func (h *OTP) TOPT() string {
+func (h *OTP) TOTP() string {
   secs := time.Now().Unix()
   return h.genOtp(uint64(secs / 30))
 }
