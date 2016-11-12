@@ -55,7 +55,7 @@ func Init(secret string, codeLength int) *OTP {
   if (codeLength >= 6 && codeLength <= 10) {
     Digits = int64(codeLength)
   } else {
-    fmt.Println("We only support codes from 6 to 8 digits; using default 6 as value")
+    fmt.Println("We only support codes from 6 to 10 digits; using default 6 as value")
   }
   return &OTP{
     SecretKey : secret,
