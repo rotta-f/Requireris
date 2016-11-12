@@ -12,7 +12,7 @@ import (
 )
 
 // Digits number for the end code
-const Digits int64 = 6
+var Digits int64 = 6
 // CounterSize is the counter byte size, defined in the RFC
 const CounterSize int = 8
 
@@ -21,7 +21,7 @@ type OTP struct {
   SecretKey string
 }
 
-func Init(secret string) *OTP {
+func Init(secret string, codeLength int) *OTP {
   if strings.Contains(secret, " ") {
     // google encodes secrets in the form of "xxxx xxxx xxxx xxxx"
     // we need to remove whitespace and uppercase it "XXXXXXXXXXXXXXXX"
@@ -33,6 +33,11 @@ func Init(secret string) *OTP {
       // create a base32 secret
       secret = base32.StdEncoding.EncodeToString([]byte(secret))
     }
+  }
+  if (codeLength >= 6 && codeLength <= 10) {
+    Digits = int64(codeLength)
+  } else {
+    fmt.Println("We only support codes from 6 to 8 digits; using default 6 as value")
   }
   fmt.Print("base32 key ")
   fmt.Println(secret)
