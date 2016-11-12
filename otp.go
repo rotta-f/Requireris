@@ -9,6 +9,7 @@ import (
   "math"
   "strings"
   "time"
+  "errors"
 )
 
 // Digits number for the end code
@@ -21,11 +22,28 @@ type OTP struct {
   SecretKey string
 }
 
+func parseGoogleSecret(secret string) (string, error) {
+  // google encodes secrets in the form of "xxxx xxxx xxxx xxxx"
+  // we need to remove whitespace and uppercase it "XXXXXXXXXXXXXXXX"
+  secret = strings.ToUpper(strings.Replace(secret, " ", "", -1))
+  _, err := base32.StdEncoding.DecodeString(secret)
+
+  if err != nil {
+    return "", errors.New("non google secret")
+  }
+  return secret, nil
+}
+
 func Init(secret string, codeLength int) *OTP {
   if strings.Contains(secret, " ") {
-    // google encodes secrets in the form of "xxxx xxxx xxxx xxxx"
-    // we need to remove whitespace and uppercase it "XXXXXXXXXXXXXXXX"
-    secret = strings.ToUpper(strings.Replace(secret, " ", "", -1))
+    res, err := parseGoogleSecret(secret)
+    if err != nil {
+      // create a base32 secret
+      secret = base32.StdEncoding.EncodeToString([]byte(secret))
+    } else {
+      // use decoded google secret
+      secret = res
+    }
   } else {
     // check if secret is already a base32 secret
     _, err := base32.StdEncoding.DecodeString(secret)
@@ -39,8 +57,6 @@ func Init(secret string, codeLength int) *OTP {
   } else {
     fmt.Println("We only support codes from 6 to 8 digits; using default 6 as value")
   }
-  fmt.Print("base32 key ")
-  fmt.Println(secret)
   return &OTP{
     SecretKey : secret,
   }
