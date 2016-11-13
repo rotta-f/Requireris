@@ -35,16 +35,12 @@ func parseGoogleSecret(secret string) (string, error) {
 }
 
 func Init(secret string, codeLength int) *OTP {
-  if strings.Contains(secret, " ") {
     res, err := parseGoogleSecret(secret)
-    if err != nil {
+    if err == nil {
       // create a base32 secret
-      secret = base32.StdEncoding.EncodeToString([]byte(secret))
-    } else {
       // use decoded google secret
       secret = res
-    }
-  } else {
+    } else {
     // check if secret is already a base32 secret
     _, err := base32.StdEncoding.DecodeString(secret)
     if err != nil {
