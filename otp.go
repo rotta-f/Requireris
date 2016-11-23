@@ -101,6 +101,7 @@ func (h *OTP) genOtp(c uint64) string {
 func (h *OTP) TOTP() string {
   secs := time.Now().Unix()
   fmt.Println(secs);
+  fmt.Scanln();
   return h.genOtp(uint64(secs / 30))
 }
 
